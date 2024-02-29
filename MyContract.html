@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Token Dapp</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+            input {
+                font-size: 16px;
+                padding: 8px;
+                margin: 8px;
+            }
+            button {
+                font-size: 16px;
+                padding: 8px;
+                margin: 8px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Token DApp</h1>
+        <p>Your token balance: <span id="balance"></span></p>
+        <input type="text" id="to" placeholder="Recipient address">
+        <input type="text" id="amount" placeholder="Amount">
+        <button onclick="sendToken()">Send tokens</button>
+        <script>
+            const contractAddress = "0x670a1B15bfCcfe21d09728dD5E60193D69b9A9c2"; //test contract
+            const contractAbi = [
+                {
+                    "inputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "constructor"
+                },
+                {
+                    "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "_to",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "_amount",
+                        "type": "uint256"
+                    }
+                    ],
+                    "name": "sendToken",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "name": "getTokenBalance",
+                    "outputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "view",
+                    "type": "function"
+                }
+            ];
+            const web3 = new Web3(Web3.givenProvider);
+            const contract = new web3.eth.Contract(contractAbi, contractAddress);
+            const account = web3.eth.accounts[0];
+            contract.methods.getTokenBalance().call({from:account}).then((balance) => {
+                document.getElementById("amount").value;
+                contract.methods.sendToken(to, amount).send({from:account}).then(() => {
+                    contract.methods.getTokenBalance().call({from:account}).then((balance) => {
+                        document.getElementById("balance").innerHTML = balance;
+                    });
+                });
+            })
+        </script>
+    </body>
+</html>
